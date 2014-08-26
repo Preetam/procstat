@@ -7,7 +7,7 @@ import (
 )
 
 type AppCounters struct {
-	Name  [32]byte
+	Name  []byte
 	Pid   int
 	User  uint64
 	Sys   uint64
@@ -47,20 +47,21 @@ func readPidStats(pid int) {
 	}
 
 	if buf, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/stat", pid)); err == nil {
-		var name []byte
 		var (
 			i int
 			c byte
 		)
 		fmt.Sscanf(string(buf), "%d %s %c %d %d %d %d %d %d %d %d %d %d %d %d",
 			&i, // placeholder
-			&name,
+			&counters.Name,
 
 			&c, &i, &i, &i, &i, &i, &i, &i, &i, &i, &i, // placeholders
 
 			&counters.User, &counters.Sys)
+	}
 
-		copy(counters.Name[:], []byte(name[1:len(name)-1]))
+	if len(counters.Name) > 1 {
+		counters.Name = counters.Name[1 : len(counters.Name)-1]
 	}
 	counters.Pid = pid
 	fmt.Println(counters)
