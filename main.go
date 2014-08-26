@@ -52,7 +52,14 @@ func readPidStats(pid int) {
 			i int
 			c byte
 		)
-		fmt.Sscanf(string(buf), "%d %s %c %d %d %d %d %d %d %d %d %d %d %d %d", &i, &name, &c, &i, &i, &i, &i, &i, &i, &i, &i, &i, &i, &counters.User, &counters.Sys)
+		fmt.Sscanf(string(buf), "%d %s %c %d %d %d %d %d %d %d %d %d %d %d %d",
+			&i, // placeholder
+			&name,
+
+			&c, &i, &i, &i, &i, &i, &i, &i, &i, &i, &i, // placeholders
+
+			&counters.User, &counters.Sys)
+
 		copy(counters.Name[:], []byte(name[1:len(name)-1]))
 	}
 	counters.Pid = pid
